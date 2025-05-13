@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,26 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Custom colors for our drawing app
+				canvas: {
+					DEFAULT: '#f8f9fa',
+					dark: '#1e1e2e'
+				},
+				tool: {
+					DEFAULT: '#6b7280',
+					selected: '#3b82f6',
+					hover: '#4b5563'
+				},
+				shape: {
+					red: '#ef4444',
+					blue: '#3b82f6',
+					green: '#22c55e',
+					yellow: '#eab308',
+					purple: '#8b5cf6',
+					pink: '#ec4899',
+					orange: '#f97316',
+					gray: '#6b7280',
 				}
 			},
 			borderRadius: {
@@ -84,11 +105,26 @@ export default {
 					to: {
 						height: '0'
 					}
-				}
+				},
+				'fade-in': {
+					'0%': { opacity: '0' },
+					'100%': { opacity: '1' }
+				},
+				'fade-out': {
+					'0%': { opacity: '1' },
+					'100%': { opacity: '0' }
+				},
+				'scale-in': {
+					'0%': { transform: 'scale(0.95)', opacity: '0' },
+					'100%': { transform: 'scale(1)', opacity: '1' }
+				},
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.2s ease-out',
+				'fade-out': 'fade-out 0.2s ease-out',
+				'scale-in': 'scale-in 0.2s ease-out',
 			}
 		}
 	},
