@@ -44,8 +44,8 @@ interface CanvasContextType {
   selectShape: (id: string, multiSelect?: boolean) => void;
   deselectShapes: () => void;
   deleteSelectedShapes: () => void;
-  setZoom: (zoom: number) => void;
-  setPan: (pan: { x: number; y: number }) => void;
+  setZoom: (zoom: number | ((prev: number) => number)) => void;
+  setPan: (pan: { x: number; y: number } | ((prev: { x: number; y: number }) => { x: number; y: number })) => void;
   setIsDrawing: (isDrawing: boolean) => void;
   undo: () => void;
   redo: () => void;

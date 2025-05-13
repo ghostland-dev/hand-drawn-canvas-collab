@@ -33,7 +33,7 @@ const Whiteboard = () => {
         const startY = e.clientY;
         
         const handleMouseMove = (moveEvent: MouseEvent) => {
-          setPan(prev => ({
+          setPan((prev) => ({
             x: prev.x + moveEvent.clientX - startX,
             y: prev.y + moveEvent.clientY - startY,
           }));
@@ -61,7 +61,7 @@ const Whiteboard = () => {
         const direction = delta > 0 ? -1 : 1;
         const factor = 0.1;
         
-        setZoom(prev => {
+        setZoom((prev) => {
           const newZoom = prev * (1 + factor * direction);
           return Math.min(Math.max(0.1, newZoom), 5);
         });

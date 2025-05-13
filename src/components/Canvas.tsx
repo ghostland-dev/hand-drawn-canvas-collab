@@ -603,7 +603,7 @@ const Canvas = () => {
         const absHeight = Math.abs(height);
         
         addShape({
-          type: activeAction as ShapeType,
+          type: activeAction as any, // Fix for ShapeType error
           x,
           y,
           width: absWidth,
