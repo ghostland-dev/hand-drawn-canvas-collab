@@ -1,6 +1,7 @@
 
 import { useState, useRef, RefObject } from 'react';
 import { useCanvas } from '@/contexts/CanvasContext';
+import { ActionType, Shape } from '@/contexts/CanvasContext';
 
 const useDrawingHandlers = (canvasRef: RefObject<HTMLCanvasElement>, roughCanvasRef: RefObject<any>) => {
   const {
