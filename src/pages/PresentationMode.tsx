@@ -1,10 +1,11 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCanvas, CanvasProvider, Shape } from '@/contexts/CanvasContext';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight, Maximize, Minimize, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+// Import roughjs as an ES module
+import rough from 'roughjs';
 
 interface PresentationCanvasProps {
   shapes: Shape[];
@@ -16,9 +17,8 @@ const PresentationCanvas = ({ shapes }: PresentationCanvasProps) => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Initialize RoughJS canvas
+    // Initialize RoughJS canvas using proper ES modules import
     if (canvasRef.current) {
-      const rough = require('roughjs');
       roughCanvasRef.current = rough.canvas(canvasRef.current);
       
       // Render shapes
@@ -65,7 +65,77 @@ const PresentationCanvas = ({ shapes }: PresentationCanvasProps) => {
           break;
           
         // Add cases for other shape types
-        // ... (similar to Canvas.tsx)
+        case 'line':
+          if (shape.points && shape.points.length === 2) {
+            roughCanvasRef.current.line(
+              shape.points[0].x, shape.points[0].y, shape.points[1].x, shape.points[1].y,
+              {
+                roughness: shape.roughness,
+                stroke: shape.strokeColor,
+                strokeWidth: shape.strokeWidth,
+              }
+            );
+          }
+          break;
+          
+        case 'arrow':
+          if (shape.points && shape.points.length === 2) {
+            // Drawing the line
+            roughCanvasRef.current.line(
+              shape.points[0].x, shape.points[0].y, shape.points[1].x, shape.points[1].y,
+              {
+                roughness: shape.roughness,
+                stroke: shape.strokeColor,
+                strokeWidth: shape.strokeWidth,
+              }
+            );
+            
+            // Drawing the arrowhead
+            const headLength = 20; // Length of the arrowhead
+            const angle = Math.atan2(shape.points[1].y - shape.points[0].y, shape.points[1].x - shape.points[0].x);
+            
+            // Arrow head points
+            const arrowHeadX1 = shape.points[1].x - headLength * Math.cos(angle - Math.PI / 6);
+            const arrowHeadY1 = shape.points[1].y - headLength * Math.sin(angle - Math.PI / 6);
+            const arrowHeadX2 = shape.points[1].x - headLength * Math.cos(angle + Math.PI / 6);
+            const arrowHeadY2 = shape.points[1].y - headLength * Math.sin(angle + Math.PI / 6);
+            
+            // Draw the arrowhead lines
+            roughCanvasRef.current.line(shape.points[1].x, shape.points[1].y, arrowHeadX1, arrowHeadY1, {
+              roughness: shape.roughness,
+              stroke: shape.strokeColor,
+              strokeWidth: shape.strokeWidth,
+            });
+            roughCanvasRef.current.line(shape.points[1].x, shape.points[1].y, arrowHeadX2, arrowHeadY2, {
+              roughness: shape.roughness,
+              stroke: shape.strokeColor,
+              strokeWidth: shape.strokeWidth,
+            });
+          }
+          break;
+          
+        case 'freedraw':
+          if (shape.points && shape.points.length > 1) {
+            for (let i = 0; i < shape.points.length - 1; i++) {
+              roughCanvasRef.current.line(
+                shape.points[i].x, shape.points[i].y, shape.points[i + 1].x, shape.points[i + 1].y,
+                {
+                  roughness: shape.roughness,
+                  stroke: shape.strokeColor,
+                  strokeWidth: shape.strokeWidth,
+                }
+              );
+            }
+          }
+          break;
+          
+        case 'text':
+          if (ctx && shape.text) {
+            ctx.font = `${shape.strokeWidth * 10}px sans-serif`;
+            ctx.fillStyle = shape.strokeColor || 'black';
+            ctx.fillText(shape.text, shape.x, shape.y + shape.height / 2);
+          }
+          break;
       }
     });
   };
